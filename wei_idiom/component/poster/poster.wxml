@@ -1,0 +1,17 @@
+<view class="com-page">
+    <view class="list">
+        <image class="poster" mode="widthFix" src="{{posterFile}}" style="margin-left:{{mleft}}rpx;margin-top:{{mtop}}rpx;width:{{imgW}}rpx;height:{{imgH}}rpx;"></image>
+        <view class="options" style="margin-left:{{mleft}}rpx;width:{{imgW}}rpx;">
+            <view class="close" style="margin-top:{{mtop/2}}rpx;">
+                <view bind:tap="_click" class="carrier" data-action="close" style="margin-left:{{iconW*2}}rpx;width:{{iconW}}rpx;height:{{iconW}}rpx;">
+                    <image src="{{icons.close}}"></image>
+                </view>
+            </view>
+            <view class="download" style="margin-top:{{mtop/2}}rpx;">
+                <view bind:tap="_click" class="carrier" data-action="download" style="margin-left:{{iconW*2}}rpx;width:{{iconW}}rpx;height:{{iconW}}rpx;">
+                    <image src="{{icons.download}}"></image>
+                </view>
+            </view>
+        </view>
+    </view>
+</view>

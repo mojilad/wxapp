@@ -1,0 +1,78 @@
+<view class="container">
+    <view class="top">
+        <view class="step">第 {{userInfo.level+1}} 关</view>
+        <view class="jinbi">
+            <image class="icon" src="{{icons.jinbi}}"></image>
+            <text class="num">{{userInfo.gold_num}}</text>
+        </view>
+        <view class="fade {{fadeClass}}">- {{setting.per_guess_gold}}</view>
+    </view>
+    <view class="board">
+        <view class="items">
+            <view class="item" wx:for="{{topic.keyword}}" wx:key="index">{{item}}</view>
+        </view>
+    </view>
+    <view class="options">
+        <button class="option share" openType="share" plain="true">求助好友</button>
+        <button class="option help" openType="share" plain="true">获取金币</button>
+    </view>
+    <view class="result">
+        <view bind:tap="check" class="item {{m1.includes(errIndex,index)?'err_sel':''}}" data-index="{{index}}" wx:for="{{topic.alternatives}}" wx:key="index">
+      {{item}}
+    </view>
+    </view>
+    <view class="ad" wx:if="{{setting.pg_video_unit_id}}">
+        <ad adTheme="white" adType="video" unitId="{{setting.pg_video_unit_id}}"></ad>
+    </view>
+</view>
+<cover-view catch:touchmove="true" class="modal {{modalClass}}" wx:if="{{resultStatus||noMoreTopic}}">
+    <cover-view class="content">
+        <cover-view class="box" wx:if="{{resultStatus}}">
+            <cover-view class="icon">
+                <cover-image class="iconp" src="{{icons.correct}}"></cover-image>
+            </cover-view>
+            <cover-view class="desc">恭喜闯关成功</cover-view>
+            <cover-view class="title">
+                <cover-view class="ltip">连续答题有机会得红包哦</cover-view>
+            </cover-view>
+            <cover-view bind:tap="goNextLevel" class="dopick">进入下一关</cover-view>
+        </cover-view>
+        <cover-view class="box box2" wx:if="{{noMoreTopic}}">
+            <cover-view bind:tap="goHome" class="close" data-event="return">
+                <cover-image src="{{icons.close}}"></cover-image>
+            </cover-view>
+            <cover-view class="title">暂无新题目</cover-view>
+            <cover-view class="answer">恭喜，您已经全部通关啦！</cover-view>
+            <cover-view class="info">
+                <cover-view>邀请好友来挑战</cover-view>
+            </cover-view>
+            <button class="next" openType="share">邀请好友</button>
+        </cover-view>
+        <cover-view class="links" wx:if="{{adv.status}}">
+            <cover-view bind:tap="goWxApp" class="item" data-index="{{index}}" wx:for="{{adv.data}}" wx:key="appid">
+                <cover-image class="avatar" src="{{item.image}}"></cover-image>
+                <cover-view class="name">{{item.name}}</cover-view>
+            </cover-view>
+        </cover-view>
+    </cover-view>
+</cover-view>
+<cover-view class="redbag" wx:if="{{redbag.status}}">
+    <cover-view class="box">
+        <cover-image class="bgimg" src="{{icons.redbag}}"></cover-image>
+        <cover-view class="title">恭喜</cover-view>
+        <cover-view class="desc">您获得一个现金红包</cover-view>
+        <cover-image bind:tap="openByRewardNo" class="open" src="{{icons.open}}" wx:if="{{!redbag.openStatus}}"></cover-image>
+        <cover-view class="opened" wx:else>{{redbag.balance}}元</cover-view>
+        <cover-view class="tip">该红包仅可用于兑换商品</cover-view>
+        <cover-view bind:tap="closeRedbag" class="xclose">
+            <cover-image class="xclosep" src="{{icons.wclose}}"></cover-image>
+        </cover-view>
+    </cover-view>
+</cover-view>
+<login bind:cancel="pgLoginCancel" bind:confirm="pgLoginConfirm" wx:if="{{loginCompStatus}}"></login>
+<wxs module="m1">
+var includes = (function(array, item) {
+    return (array.indexOf(item) != -1)
+});
+module.exports.includes = includes;
+</wxs>

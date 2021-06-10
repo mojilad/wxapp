@@ -1,0 +1,17 @@
+<view class="pg-container">
+    <view class="list">
+        <view class="item " wx:for="{{qa_list}}" wx:key="index">
+            <view bind:tap="selItem" class="top" data-index="{{index}}">
+                <view class="q {{ex_idx==index?'active':''}}">{{item.q}}</view>
+                <image class="expand" src="{{ex_idx==index?icons.list_expand:icons.list}}"></image>
+            </view>
+            <view class="down" wx:if="{{ex_idx==index}}">
+                <view class="a">{{item.a}}</view>
+            </view>
+        </view>
+    </view>
+    <view bind:tap="back" class="back">返回答题</view>
+    <view class="ad" wx:if="{{setting.pg_video_unit_id}}">
+        <ad adTheme="white" adType="video" unitId="{{setting.pg_video_unit_id}}"></ad>
+    </view>
+</view>

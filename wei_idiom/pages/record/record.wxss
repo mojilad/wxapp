@@ -1,0 +1,88 @@
+page {
+    background-color: #F6F7F9;
+}
+
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    overflow: hidden;
+}
+
+.item-list {
+    overflow: hidden;
+}
+
+.item-list .item {
+    overflow: hidden;
+    background-color: #fff;
+    margin-bottom: 20rpx;
+}
+
+.item-list .item .main {
+    height: 86rpx;
+    color: #6F6F6F;
+    line-height: 86rpx;
+    font-size: 24rpx;
+    border-bottom: 1rpx solid #F4F4F4;
+}
+
+.item-list .item .main .trade_no {
+    display: block;
+    float: left;
+    margin-left: 26rpx;
+}
+
+.item-list .item .main .trade_date {
+    display: block;
+    float: right;
+    margin-right: 26rpx;
+}
+
+.item-list .item .detail {
+    height: 130rpx;
+    position: relative;
+}
+
+.item-list .item .detail image {
+    display: block;
+    float: left;
+    width: 145rpx;
+    height: 145rpx;
+    margin: 15rpx 0 15rpx 26rpx;
+}
+
+.item-list .item .detail .g-info {
+    float: left;
+    margin-left: 20rpx;
+    color: #1B213B;
+    padding-top: 12rpx;
+    width: 500rpx;
+}
+
+.item-list .item .detail .g-info .title {
+    font-size: 26rpx;
+    height: 50rpx;
+    line-height: 50rpx;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.item-list .item .detail .g-info .desc {
+    font-size: 24rpx;
+    height: 42rpx;
+    line-height: 42rpx;
+}
+
+.item-list .item .detail .go-detail {
+    position: absolute;
+    color: white;
+    right: 52rpx;
+    bottom: 30rpx;
+    font-size: 24rpx;
+    padding: 6rpx 26rpx;
+    background-color: #5191FD;
+    border-radius: 26rpx;
+    height: 36rpx;
+    line-height: 36rpx;
+}

@@ -1,0 +1,322 @@
+{template 'common/header'}
+<ul class="nav nav-tabs">
+    <li {if $op =='basic'} class="active" {/if}>
+    <a href="{php echo $this->createWebUrl('Setting', array('op'=>'basic'));}">基础设置</a>
+    </li>
+    <li {if $op =='law_list'} class="active" {/if}>
+    <a href="{php echo $this->createWebUrl('Law', array('op'=>'law_list'));}">奖励配置</a>
+    </li>
+    <li {if $op =='adv_list'} class="active" {/if}>
+    <a href="{php echo $this->createWebUrl('Adv', array('op' => 'adv_list'));}">小程序推广</a>
+    </li>
+    <li {if $op =='share_list'} class="active" {/if}>
+    <a href="{php echo $this->createWebUrl('Share', array('op'=>'share_list'));}">分享文案</a>
+    </li>
+    {if $op == 'law_add'}
+    <li class="active" >
+    <a href="">新增奖励方案</a>
+    </li>
+    {/if}
+    {if $op == 'law_edit'}
+    <li class="active" >
+        <a href="">编辑奖励方案</a>
+    </li>
+    {/if}
+</ul>
+<style>
+    th{
+        text-align: center !important;
+    }
+    td{
+        text-align: center !important;
+        white-space: normal !important;
+        word-break: break-all !important;
+        vertical-align: middle !important;
+    }
+    .label {
+        cursor: pointer;
+    }
+
+</style>
+<link href="https://cdn.bootcss.com/sweetalert/1.1.3/sweetalert.min.css" rel="stylesheet">
+<script>
+    require.config({
+        paths: {
+            "sweetalert":"https://cdn.bootcss.com/sweetalert/1.1.3/sweetalert.min",
+        }
+    });
+</script>
+{if $op == 'law_list'}
+<div class="main">
+<div class="panel panel-default">
+    <div class="panel-heading">奖励配置列表</div>
+    <div class="panel-body">
+        <div class="table-responsive panel-body">
+            <table class="table table-hover" style="min-width: 200px;">
+                <thead class="navbar-inner">
+                <tr>
+                    <th>ID</th>
+                    <th>用户余额区间</th>
+                    <th>奖励金额(元)</th>
+                    <th>概率</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $list $vo}
+                <tr>
+                    <td>{$vo['id']}</td>
+                    <td>{$vo['stage_start']} - {$vo['stage_end']}</td>
+                    <td>{$vo['money_min']} - {$vo['money_max']}</td>
+                    <td>{$vo['probability']}%</td>
+                    <td>
+                        {if $vo['status'] == '1'}
+                        <label class="label label-info">启用</label>
+                        {else if $vo['status'] == '-1'}
+                        <label  class="label label-default">禁用</label>
+                        {/if}
+                    </td>
+                    <td>
+                        <a data-id="{$vo['id']}" class="btn btn-info btn-sm edit"><i class="fa fa-edit"></i> 编辑</a>
+                        <a data-id="{$vo['id']}" class="btn btn-danger btn-sm delete"><i class="fa fa-times"></i> 删除</a>
+                    </td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+            {$pager}
+        </div>
+    </div>
+</div>
+    <a class="btn btn-info" href="{php echo $this->createWebUrl('Law', array('op'=>'law_add'));}" role="button">添加配置</a>
+
+</div>
+<script>
+    require(['jquery', 'sweetalert', 'util'], function($, sw, util){
+        $(function() {
+            $('.edit').click(function(){
+                let id = $(this).data('id');
+                let locateTo = "{php echo $this->createWebUrl('Law', array('op'=>'law_edit'));}"+`&id=${id}`;
+                window.location.href = locateTo
+            });
+
+            $('.delete').click(function(){
+                let id = $(this).data('id');
+                let confirmObj = {
+                    title: "删除确认",
+                    text: "删除操作不可逆，不可恢复，确定要删除吗？",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#a1d9f2",
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    closeOnConfirm: false
+                };
+                sw( confirmObj, function(){
+                    $.ajax({
+                        url:"{php echo $this->createWebUrl('Law', array('op'=>'delete'));}",
+                        type: 'post',
+                        data: {id: id},
+                        async: false,
+                        success: function (res) {
+                            if (res.code === 0) {
+                                sw(res.message, "", "success");
+                                setTimeout(function () {
+                                    window.location.reload();
+                                }, 500);
+                            } else {
+                                sw(res.message, "", "error");
+                            }
+                        }
+                    });
+                });
+            });
+        });
+    });
+
+</script>
+{elseif $op == 'law_add'}
+<div class="main">
+<div class="panel panel-default">
+    <div class="panel-heading">新增奖励方案</div>
+    <div class="panel-body">
+        <form action="" method="post" class="form-horizontal form" id="form">
+            <input type="hidden" name="c" value="{$_GPC['c']}">
+            <input type="hidden" name="a" value="{$_GPC['a']}">
+            <input type="hidden" name="do" value="{$_GPC['do']}">
+            <input type="hidden" name="m" value="{$_GPC['m']}">
+            <input type="hidden" name="op" value="{$op}">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">起始金额 <font color="red">*</font></label>
+                <div class="col-sm-8">
+                    <input type="text" name="data[stage_start]" class="form-control" placeholder="请输入用户所处阶段余额起始值"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">结束金额 <font color="red">*</font></label>
+                <div class="col-sm-8">
+                    <input type="text" name="data[stage_end]" class="form-control" placeholder="请输入用户所处阶段余额结束值"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">最少奖励金额 <font color="red">*</font></label>
+                <div class="col-sm-8">
+                    <input type="text" name="data[money_min]" class="form-control" placeholder="该阶段每次奖励最少金额"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">最多奖励金额 <font color="red">*</font></label>
+                <div class="col-sm-8">
+                    <input type="text" name="data[money_max]" class="form-control" placeholder="该阶段每次奖励最多金额"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">触发几率 <font color="red">*</font></label>
+                <div class="col-sm-8">
+                    <input type="text" name="data[probability]" class="form-control" placeholder="输入1，则触发概率为1%"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">状态 <font color="red">*</font></label>
+                <div class="col-xs-12 col-sm-8">
+                    <label class="radio radio-inline">
+                        <input type="radio" name="data[status]" value="-1" > 禁用
+                    </label>
+                    <label class="radio radio-inline">
+                        <input type="radio" name="data[status]" value="1" > 启用
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-xs-12 col-sm-8">
+                    <input name="submit" type="submit" value="提交" class="btn btn-primary" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+<script type="text/javascript">
+    require(['jquery', 'util'], function($, util){
+        $(function(){
+            $('#form').submit(function(){
+                var result = true;
+                if($('input[name="data[stage_start]"]').val() == ''){
+                    result = false;
+                    util.message('阶段起始金额缺失.');
+                } else if($('input[name="data[stage_end]"]').val() == null){
+                    result = false;
+                    util.message('阶段结束金额缺失.');
+                } else if($('input[name="data[money_min]"]').val() == ''){
+                    result = false;
+                    util.message('最少奖励金额缺失.');
+                }else if($('input[name="data[money_max]"]').val() == ''){
+                    result = false;
+                    util.message('最多奖励金额缺失.');
+                } else if($('input[name="data[probability]"]').val() == ''){
+                    result = false;
+                    util.message('概率缺失.');
+                }
+                return result;
+            });
+
+        });
+    });
+</script>
+{elseif $op == 'law_edit'}
+<div class="main">
+    <div class="panel panel-default">
+        <div class="panel-heading">编辑奖励方案</div>
+        <div class="panel-body">
+            <form action="" method="post" class="form-horizontal form" id="form">
+                <input type="hidden" name="c" value="{$_GPC['c']}">
+                <input type="hidden" name="a" value="{$_GPC['a']}">
+                <input type="hidden" name="do" value="{$_GPC['do']}">
+                <input type="hidden" name="m" value="{$_GPC['m']}">
+                <input type="hidden" name="op" value="{$op}">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">起始金额 <font color="red">*</font></label>
+                    <div class="col-sm-8">
+                        <input type="text" name="data[stage_start]" value="{$law['stage_start']}" class="form-control" placeholder="请输入用户所处阶段余额起始值"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">结束金额 <font color="red">*</font></label>
+                    <div class="col-sm-8">
+                        <input type="text" name="data[stage_end]" value="{$law['stage_end']}" class="form-control" placeholder="请输入用户所处阶段余额结束值"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">最少奖励金额 <font color="red">*</font></label>
+                    <div class="col-sm-8">
+                        <input type="text" name="data[money_min]" value="{$law['money_min']}" class="form-control" placeholder="该阶段每次奖励最少金额"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">最多奖励金额 <font color="red">*</font></label>
+                    <div class="col-sm-8">
+                        <input type="text" name="data[money_max]" value="{$law['money_max']}" class="form-control" placeholder="该阶段每次奖励最多金额"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">触发几率 <font color="red">*</font></label>
+                    <div class="col-sm-8">
+                        <input type="text" name="data[probability]" value="{$law['probability']}" class="form-control" placeholder="输入1，则触发概率为1%"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 col-lg-2 control-label">状态 <font color="red">*</font></label>
+                    <div class="col-xs-12 col-sm-8">
+                        <label class="radio radio-inline">
+                            <input type="radio" name="data[status]" value="-1" {if $law['status'] == '-1'}checked{/if} > 禁用
+                        </label>
+                        <label class="radio radio-inline">
+                            <input type="radio" name="data[status]" value="1" {if $law['status'] == '1'}checked{/if}> 启用
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-12 col-sm-9 col-md-10 col-lg-10 col-sm-offset-3 col-md-offset-2 col-lg-offset-2">
+                        <input type="hidden" name="id" value="{$id}" />
+                        <input name="submit" type="submit" value="提交" class="btn btn-primary" />
+                        <input type="hidden" name="token" value="{$_W['token']}" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    require(['jquery', 'util'], function($, util){
+        $(function(){
+            $('#form').submit(function(){
+                var result = true;
+                if($('input[name="data[stage_start]"]').val() == ''){
+                    result = false;
+                    util.message('阶段起始金额缺失.');
+                } else if($('input[name="data[stage_end]"]').val() == null){
+                    result = false;
+                    util.message('阶段结束金额缺失.');
+                } else if($('input[name="data[money_min]"]').val() == ''){
+                    result = false;
+                    util.message('最少奖励金额缺失.');
+                }else if($('input[name="data[money_max]"]').val() == ''){
+                    result = false;
+                    util.message('最多奖励金额缺失.');
+                } else if($('input[name="data[probability]"]').val() == ''){
+                    result = false;
+                    util.message('概率缺失.');
+                }
+                return result;
+            });
+
+        });
+    });
+</script>
+{/if}
+{template 'common/footer'}

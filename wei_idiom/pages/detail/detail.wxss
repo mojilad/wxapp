@@ -1,0 +1,457 @@
+.modal {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0,0,0,.6);
+}
+
+.modal .content {
+    position: relative;
+    height: 840rpx;
+    width: 680rpx;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+}
+
+.modal .links {
+    height: 180rpx;
+    padding-top: 36rpx;
+    border-radius: 20rpx;
+    background-color: #ffffff;
+    color: #4B494A;
+    margin-top: 100rpx;
+}
+
+.modal .links .item {
+    float: left;
+    width: 120rpx;
+    margin-left: 40rpx;
+    font-size: 22rpx;
+    text-align: center;
+}
+
+.modal .links .item .avatar {
+    width: 120rpx;
+    height: 120rpx;
+    border-radius: 10rpx;
+}
+
+.modal .links .name {
+    height: 48rpx;
+    line-height: 40rpx;
+    width: 120rpx;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.modal .box,.modal .box2 {
+    width: 494rpx;
+    margin: 0 auto;
+    padding-top: 32rpx;
+    background-color: #fff;
+    border-radius: 25rpx;
+    text-align: center;
+    position: relative;
+    padding-bottom: 10rpx;
+}
+
+.modal .box {
+    height: 480rpx;
+}
+
+.modal .box2 {
+    height: 466rpx;
+}
+
+.modal .box .close {
+    position: absolute;
+    top: 0rpx;
+    right: 0rpx;
+    width: 108rpx;
+    height: 108rpx;
+    background-color: #fff;
+    border-radius: 50%;
+}
+
+.modal .box .close image {
+    width: 32rpx;
+    height: 32rpx;
+    margin: 36rpx;
+}
+
+.modal .box .title {
+    height: 92rpx;
+    line-height: 92rpx;
+    font-size: 28rpx;
+    text-align: center;
+    color: #4B494A;
+    letter-spacing: 2rpx;
+    margin-bottom: 32rpx;
+}
+
+.modal .box .redbag {
+    letter-spacing: 0rpx;
+    margin: 0 8rpx;
+    font-size: 44rpx;
+    font-weight: bold;
+    color: #fd5757;
+}
+
+.modal .box .desc {
+    height: 108rpx;
+    line-height: 108rpx;
+    font-size: 32rpx;
+    text-align: center;
+    color: #4B494A;
+    font-weight: bold;
+}
+
+.modal .box .icon {
+    width: 96rpx;
+    height: 96rpx;
+    background-color: #9705EA;
+    border-radius: 50%;
+    margin: 32rpx auto 0rpx;
+}
+
+.modal .box .icon .iconp {
+    margin: 16rpx;
+    width: 64rpx;
+    height: 64rpx;
+}
+
+.modal .box .dopick {
+    color: white;
+    background-color: #fd5757;
+    border-radius: 36rpx;
+    height: 72rpx;
+    line-height: 72rpx;
+    font-size: 28rpx;
+    width: 380rpx;
+    margin: 0 auto;
+    margin-bottom: 48rpx;
+}
+
+.box2 .title {
+    margin-top: 20rpx;
+    color: #FF6000;
+    height: 88rpx;
+    line-height: 88rpx;
+    font-size: 36rpx;
+    line-height: 88rpx;
+    font-weight: bold;
+    border-top-left-radius: 25rpx;
+    border-top-right-radius: 25rpx;
+}
+
+.box2 .answer {
+    margin-top: 20rpx;
+    margin-left: 50rpx;
+    margin-bottom: 25rpx;
+    width: 396rpx;
+    height: 60rpx;
+    border-radius: 8rpx;
+    color: #BD7839;
+    font-size: 28rpx;
+    line-height: 60rpx;
+    font-weight: bold;
+}
+
+.box2 .info {
+    padding: 8rpx 0;
+}
+
+.box2 .info text {
+    display: block;
+    height: 40rpx;
+    line-height: 40rpx;
+    font-size: 24rpx;
+    color: #BD7839;
+}
+
+.box2 .next {
+    margin: 28rpx auto;
+    color: white;
+    width: 340rpx;
+    height: 88rpx;
+    line-height: 88rpx;
+    font-size: 32rpx;
+    background-color: #6105B2;
+    border-radius: 44rpx;
+    margin-bottom: 44rpx;
+}
+
+.redbag {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0,0,0,.6);
+}
+
+.redbag .box {
+    position: relative;
+    width: 468rpx;
+    height: 740rpx;
+    top: 45%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    text-align: center;
+}
+
+.redbag .bgimg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 468rpx;
+    height: 620rpx;
+    border-radius: 16rpx;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.redbag .box .title {
+    height: 100rpx;
+    line-height: 100rpx;
+    font-size: 60rpx;
+    padding-top: 70rpx;
+    font-weight: bold;
+}
+
+.redbag .box .desc {
+    height: 60rpx;
+    line-height: 60rpx;
+    font-size: 32rpx;
+    font-weight: bold;
+    margin-top: 28rpx;
+    color: #fdcc75;
+    margin-bottom: 72rpx;
+}
+
+.redbag .box .open {
+    width: 160rpx;
+    height: 160rpx;
+    border-radius: 50%;
+    display: block;
+    margin: 0 auto;
+}
+
+.redbag .box .opened {
+    display: block;
+    height: 160rpx;
+    width: 250rpx;
+    margin: 0 auto;
+    line-height: 160rpx;
+    background-color: #ffffff;
+    font-size: 45rpx;
+    border-radius: 16rpx;
+    letter-spacing: 4rpx;
+    color: #f2484e;
+}
+
+.redbag .box .tip {
+    color: #ffffff;
+    font-size: 24rpx;
+    letter-spacing: 4rpx;
+    height: 40rpx;
+    line-height: 40rpx;
+    margin-top: 30rpx;
+}
+
+.redbag .box .xclose {
+    width: 60rpx;
+    height: 60rpx;
+    background-color: rgba(255,255,255,.8);
+    border-radius: 50%;
+    margin: 0 auto;
+    margin-top: 120rpx;
+}
+
+.redbag .box .xclose .xclosep {
+    width: 40rpx;
+    height: 40rpx;
+    margin: 10rpx;
+}
+
+page {
+    background-color: #5735B7;
+    color: white;
+}
+
+.top {
+    margin: 20rpx 0;
+    height: 70rpx;
+    line-height: 70rpx;
+    position: relative;
+}
+
+.top .step {
+    text-align: center;
+    font-size: 32rpx;
+    width: 180rpx;
+    margin: 0 auto;
+}
+
+.top .jinbi {
+    width: 175rpx;
+    height: 60rpx;
+    position: absolute;
+    top: 5rpx;
+    right: 0;
+    background-color: rgba(255,255,255,.1);
+    border-top-left-radius: 35rpx;
+    border-bottom-left-radius: 35rpx;
+    line-height: 60rpx;
+}
+
+.top .jinbi .icon {
+    float: left;
+    width: 40rpx;
+    height: 40rpx;
+    margin: 10rpx;
+    margin-left: 22rpx;
+}
+
+.top .jinbi .num {
+    font-size: 28rpx;
+    float: left;
+    display: block;
+    width: 100rpx;
+    text-align: center;
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(0);
+    }
+}
+
+@-webkit-keyframes fadeInOut {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(0);
+    }
+}
+
+.top .fade {
+    width: 128rpx;
+    height: 30rpx;
+    line-height: 30rpx;
+    float: right;
+    text-align: center;
+    font-size: 28rpx;
+    opacity: 0;
+}
+
+.top .fadeout {
+    animation: fadeInOut 1s ease-in 0s 1;
+    animation-fill-mode: forwards;
+}
+
+.board {
+    margin: 30rpx auto;
+    width: 660rpx;
+    height: 380rpx;
+    background-color: #006837;
+    border-radius: 10rpx;
+    overflow: hidden;
+}
+
+.board .items {
+    width: 480rpx;
+    height: 120rpx;
+    margin: 130rpx auto;
+}
+
+.board .item {
+    box-sizing: border-box;
+    font-size: 48rpx;
+    font-weight: bold;
+    text-align: center;
+    line-height: 120rpx;
+    width: 120rpx;
+    height: 120rpx;
+    border: 2rpx solid #D4C9F5;
+    float: left;
+    border-radius: 4rpx;
+}
+
+.options {
+    width: 630rpx;
+    height: 60rpx;
+    margin: 30rpx auto;
+}
+
+.options .option {
+    width: 315rpx;
+    float: left;
+    border: none;
+    border-radius: 0rpx;
+    height: 60rpx;
+    line-height: 60rpx;
+    color: white;
+    font-size: 28rpx;
+    font-weight: bold;
+}
+
+.options .share {
+    background-color: #ED5A5A;
+    border-top-left-radius: 30rpx;
+    border-bottom-left-radius: 30rpx;
+}
+
+.options .help {
+    background-color: #509FD1;
+    border-top-right-radius: 30rpx;
+    border-bottom-right-radius: 30rpx;
+}
+
+.result {
+    width: 630rpx;
+    margin: 40rpx auto;
+    overflow: hidden;
+}
+
+.result .item {
+    margin-right: 36.66rpx;
+    font-size: 64rpx;
+    box-sizing: border-box;
+    width: 130rpx;
+    height: 120rpx;
+    border: 2rpx solid #D4C9F5;
+    line-height: 120rpx;
+    text-align: center;
+    float: left;
+    position: relative;
+    border-radius: 8rpx;
+}
+
+.result .err_sel {
+    background-color: #ED5A5A;
+}
+
+.result .item:nth-last-child(1) {
+    margin-right: 0rpx;
+}
+
+.ad {
+    margin: 0 40rpx;
+    border-radius: 12rpx;
+    overflow: hidden;
+}

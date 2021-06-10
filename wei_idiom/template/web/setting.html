@@ -1,0 +1,282 @@
+{template 'common/header'}
+<ul class="nav nav-tabs">
+    <li {if $op =='basic'} class="active" {/if}>
+        <a href="{php echo $this->createWebUrl('Setting', array('op'=>'basic'));}">&#22522;&#30784;&#35774;&#32622;</a>
+    </li>
+    <li {if $op =='law_list'} class="active" {/if}>
+        <a href="{php echo $this->createWebUrl('Law', array('op'=>'law_list'));}">&#22870;&#21169;&#37197;&#32622;</a>
+    </li>
+    <li {if $op =='adv_list'} class="active" {/if}>
+    <a href="{php echo $this->createWebUrl('Adv', array('op' => 'adv_list'));}">&#23567;&#31243;&#24207;&#25512;&#24191;</a>
+    </li>
+    <li {if $op =='share_list'} class="active" {/if}>
+        <a href="{php echo $this->createWebUrl('share', array('op'=>'share_list'));}">&#20998;&#20139;&#25991;&#26696;</a>
+    </li>
+</ul>
+<style>
+    th{
+        text-align: center !important;
+    }
+    td{
+        text-align: center !important;
+        white-space: normal !important;
+        word-break: break-all !important;
+        vertical-align: middle !important;
+    }
+    .img-thumbnail {
+        background-color: #e6e6e6;
+        border: none;
+    }
+    .shiliimg {
+        color: #ff0030;
+    }
+</style>
+<script>
+    require.config({
+        paths: {
+            "vue": "{MODULE_URL}core/library/Vue/vue.min",
+        }
+    });
+</script>
+{if $op == 'basic'}
+<div class="main">
+<form action="" method="post" class="form-horizontal form" id="setting-form">
+    <input type="hidden" name="c" value="{$_GPC['c']}">
+    <input type="hidden" name="a" value="{$_GPC['a']}">
+    <input type="hidden" name="do" value="{$_GPC['do']}">
+    <input type="hidden" name="m" value="{$_GPC['m']}">
+    {if $is_setting}
+    <input type="hidden" name="status" value="1">
+    {/if}
+    <div class="btn-group" role="group" aria-label="..." style="margin-bottom: 20px;">
+        <a v-for="(item,index) in tab_list" :class="[ 'btn btn-default', { active: index == sel_idx }]" @click="changeIdx(index)" >{{item.name}}</a>
+    </div>
+
+    <div class="panel panel-default" v-if="sel_idx == 0">
+        <div class="panel-heading">&#22522;&#30784;&#20449;&#24687;</div>
+        <div class="panel-body">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">&#25991;&#26723;&#22320;&#22336; </label>
+                <div class="col-sm-8" style="padding-top: 7px;">
+                    &#104;&#116;&#116;&#112;&#115;&#58;&#47;&#47;&#100;&#116;&#109;&#98;&#119;&#46;&#99;&#111;&#109;&#47;&#50;&#55;&#54;&#54;&#46;&#104;&#116;&#109;&#108;
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">&#23567;&#31243;&#24207;&#26631;&#39064;&#21517;&#31216; <font color="red">*</font></label>
+                <div class="col-sm-8">
+                    <input type="text" name="data[name]" class="form-control" value="{$settings['name']}" />
+                </div>
+            </div>
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-8">&#35831;&#19978;&#20256;&#35268;&#26684;&#12298;&#53;&#52;&#48;&#112;&#120;&#42;&#57;&#48;&#112;&#120;&#12299;&#27604;&#20363;&#30340;&#112;&#110;&#103;&#65292;&#22914;&#65306;<a class="shiliimg" href="&#104;&#116;&#116;&#112;&#115;&#58;&#47;&#47;&#119;&#101;&#55;&#45;&#119;&#120;&#97;&#112;&#112;&#46;&#111;&#115;&#115;&#45;&#99;&#110;&#45;&#98;&#101;&#105;&#106;&#105;&#110;&#103;&#46;&#97;&#108;&#105;&#121;&#117;&#110;&#99;&#115;&#46;&#99;&#111;&#109;&#47;&#119;&#120;&#97;&#112;&#112;&#47;&#119;&#101;&#105;&#95;&#100;&#97;&#116;&#105;&#47;&#112;&#117;&#98;&#108;&#105;&#99;&#47;&#100;&#101;&#109;&#111;&#45;&#104;&#101;&#97;&#100;&#101;&#114;&#46;&#112;&#110;&#103;" target="_blank">&#31034;&#20363;&#22270;&#29255;</a></div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">&#39318;&#39029;&#22270;&#29255; <font color="red">*</font></label>
+                <div class="col-sm-8">
+                    {php echo tpl_form_field_image('data[header_img]', $settings['header_img']);}
+                </div>
+                <br>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" >&#27880;&#20876;&#21021;&#22987;&#37329;&#24065; <small>*</small></label>
+                <div class="col-sm-8">
+                    <input type="text" name="data[register_gold]" class="form-control" value="{$settings['register_gold']}"  />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" >&#36992;&#35831;&#49;&#20154;&#22870;&#21169;&#37329;&#24065; <small>*</small></label>
+                <div class="col-sm-8">
+                    <input type="text" name="data[per_invite_gold]" class="form-control" value="{$settings['per_invite_gold']}"  />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" >&#27599;&#20570;&#49;&#39064;&#28040;&#32791;&#37329;&#24065; <small>*</small></label>
+                <div class="col-sm-8">
+                    <input type="text" name="data[per_guess_gold]" class="form-control" value="{$settings['per_guess_gold']}"  />
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label" >&#31572;&#20960;&#36947;&#39064;&#35302;&#21457;&#32418;&#21253;<small>*</small></label>
+                <div class="col-sm-8">
+                    <input type="text" name="data[redbag_interval]" class="form-control" value="{$settings['redbag_interval']}"  />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" >&#23458;&#26381;&#24494;&#20449;&#21495;<small>*</small></label>
+                <div class="col-sm-8">
+                    <input type="text" name="data[kf_wxid]" class="form-control" value="{$settings['kf_wxid']}"  />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" >&#36992;&#35831;&#22870;&#21169;&#25991;&#26696;<small class="shiliimg">*</small></label>
+                <div class="col-sm-8">
+                    <input type="text" name="data[invite_text]" class="form-control" value="{$settings['invite_text']}" placeholder="&#20813;&#36153;&#37329;&#24065;&#39029;&#65292;&#24050;&#36992;&#35831;&#29992;&#25143;&#22836;&#20687;&#19978;&#26041;&#25991;&#26696;" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" >&#36992;&#35831;&#25353;&#38062;&#25991;&#26696;<small class="shiliimg">*</small></label>
+                <div class="col-sm-8">
+                    <input type="text" name="data[invite_button_text]" class="form-control" value="{$settings['invite_button_text']}" placeholder="&#20813;&#36153;&#37329;&#24065;&#39029;&#65292;&#28857;&#20987;&#36992;&#35831;&#25353;&#38062;&#25991;&#26696;" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default"  v-if="sel_idx == 1">
+        <div class="panel-heading">&#24191;&#21578;&#37197;&#32622;</div>
+        <div class="panel-body">
+            <div class="form-group">
+                <label class="col-sm-2 control-label" >&#66;&#97;&#110;&#110;&#101;&#114;&#24191;&#21578;&#73;&#68; <small>*</small></label>
+                <div class="col-sm-8">
+                    <input type="text" name="data[unit_id]" class="form-control" value="{$settings['unit_id']}" placeholder="&#35831;&#36755;&#20837;&#66;&#97;&#110;&#110;&#101;&#114;&#24191;&#21578;&#105;&#100;" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" >&#35270;&#39057;&#24191;&#21578;&#73;&#68; <small>*</small></label>
+                <div class="col-sm-8">
+                    <input type="text" name="data[pg_video_unit_id]" class="form-control" value="{$settings['pg_video_unit_id']}" placeholder="&#35831;&#36755;&#20837;&#35270;&#39057;&#24191;&#21578;&#105;&#100;" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">&#25554;&#23631;&#24191;&#21578;&#29366;&#24577; <font color="red">*</font></label>
+                <div class="col-sm-8">
+                    <label class="radio radio-inline">
+                        <input type="radio" name="data[screen_ad_status]" value="0" {if $settings['screen_ad_status'] == '0'}checked{/if} /> &#20851;&#38381;
+                    </label>
+                    <label class="radio radio-inline">
+                        <input type="radio" name="data[screen_ad_status]" value="1" {if $settings['screen_ad_status'] == '1'}checked{/if} /> &#25171;&#24320;
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" >&#25554;&#23631;&#24191;&#21578;&#73;&#68; <small>*</small></label>
+                <div class="col-sm-8">
+                    <input type="text" name="data[screen_unit_id]" class="form-control" value="{$settings['screen_unit_id']}" placeholder="&#35831;&#36755;&#20837;&#25554;&#23631;&#24191;&#21578;&#105;&#100;" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">&#28608;&#21169;&#35270;&#39057;&#29366;&#24577; <font color="red">*</font></label>
+                <div class="col-sm-8">
+                    <label class="radio radio-inline">
+                        <input type="radio" name="data[video_ad_status]" value="0" {if $settings['video_ad_status'] == '0'}checked{/if} /> &#20851;&#38381;
+                    </label>
+                    <label class="radio radio-inline">
+                        <input type="radio" name="data[video_ad_status]" value="1" {if $settings['video_ad_status'] == '1'}checked{/if} /> &#25171;&#24320;
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label" >&#27599;&#20154;&#27599;&#22825;&#21487;&#30475;&#35270;&#39057;&#25968;&#65306; <small>*</small></label>
+                <div class="col-sm-8">
+                    <input type="text" name="data[day_video_num]" class="form-control" value="{$settings['day_video_num']}" placeholder="&#24314;&#35758;&#19981;&#35201;&#36229;&#36807;&#49;&#48;&#27425;"  />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label" >&#28608;&#21169;&#24335;&#35270;&#39057;&#73;&#68;&#32;<small>*</small></label>
+                <div class="col-sm-8">
+                    <input type="text" name="data[video_unit_id]" class="form-control" value="{$settings['video_unit_id']}" placeholder="&#35831;&#36755;&#20837;&#28608;&#21169;&#24335;&#35270;&#39057;&#24191;&#21578;&#105;&#100;" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" >&#27599;&#30475;&#49;&#27425;&#35270;&#39057;&#22870;&#21169;&#37329;&#24065; <small>*</small></label>
+                <div class="col-sm-8">
+                    <input type="text" name="data[per_video_gold]" class="form-control" value="{$settings['per_video_gold']}"  />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default" v-if="sel_idx == 2">
+        <div class="panel-heading">&#20851;&#27880;&#20844;&#20247;&#21495;</div>
+        <div class="panel-body">
+            <div class="form-group">
+                <label class="col-sm-2 control-label" >&#20844;&#20247;&#21495;&#21517;&#31216; <small>*</small></label>
+                <div class="col-sm-8">
+                    <input type="text" name="data[gzh_name]" class="form-control" value="{$settings['gzh_name']}" placeholder="&#35831;&#36755;&#20837;&#20844;&#20247;&#21495;&#21517;&#31216;" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">&#20844;&#20247;&#21495;&#22836;&#20687; <font color="red">*</font></label>
+                <div class="col-sm-8">
+                    {php echo tpl_form_field_image('data[gzh_img]', $settings['gzh_img']);}
+                </div>
+                <br>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">&#20844;&#20247;&#21495;&#20108;&#32500;&#30721; <font color="red">*</font></label>
+                <div class="col-sm-8">
+                    {php echo tpl_form_field_image('data[gzh_ewm_img]', $settings['gzh_ewm_img']);}
+                </div>
+                <br>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" >&#20844;&#20247;&#21495;&#20171;&#32461;<small class="shiliimg">*</small></label>
+                <div class="col-sm-8">
+                    <input type="text" name="data[gzh_guide_text]" class="form-control" value="{$settings['gzh_guide_text']}" placeholder="&#35831;&#36755;&#20837;&#20171;&#32461;&#65292;&#19981;&#35201;&#36229;&#36807;&#49;&#56;&#20010;&#23383;&#28304;&#30721;&#26469;&#33258;&#68;&#84;&#27169;&#26495;&#32593;&#100;&#116;&#109;&#98;&#119;&#46;&#99;&#111;&#109;" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label"></label>
+        <div class="col-sm-8">
+            <input name="submit" type="submit" value="提交" class="btn btn-primary" />
+            <input type="hidden" name="token" value="{$_W['token']}" />
+        </div>
+    </div>
+
+</form>
+</div>
+<script>
+    require(['jquery', 'util', 'vue'], function($, util, Vue){
+        $(function(){
+            var vm = new Vue({
+                el:'.main',
+                data: {
+                    sel_idx: 0,
+                    tab_list: [
+                        {
+                            name: '基础信息',
+                            href: '#basic'
+                        },
+                        {
+                            name: '广告配置',
+                            href: '#adconf'
+                        },
+                        {
+                            name: '关注公众号',
+                            href: '#subscribe'
+                        },
+                    ],
+                },
+                created() {
+                    $('.img-thumbnail').css("background-color","#e6e6e6");
+                    $('.shiliimg').css("color","#ff0030");
+                },
+                methods:{
+                    changeIdx(idx) {
+                        this.sel_idx = idx
+                    }
+                }
+            });
+            $('#setting-form').submit(function(){
+                var result = true;
+                if($('input[name="data[title]"]').val() == ''){
+                    result = false;
+                    util.message('请填写小程序标题名称.');
+                }
+                return result;
+            });
+        });
+    });
+</script>
+{/if}
+{template 'common/footer'}

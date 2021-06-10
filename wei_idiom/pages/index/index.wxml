@@ -1,0 +1,84 @@
+<view class="pg-container">
+    <view class="broadbox">
+        <view class="broadcast" wx:if="{{showBroad}}">
+            <image class="icon" src="{{icons.broad}}"></image>
+            <view class="itemlist">
+                <view class="item" wx:for="{{broadList}}" wx:key="index">
+          恭喜用户 {{item.nickname}} 获得 {{item.balance}} 元红包
+        </view>
+            </view>
+        </view>
+    </view>
+    <view class="mtop animated fadeInRight">
+        <view class="title">
+            <image class="title-img" src="{{setting.header_img}}"></image>
+        </view>
+    </view>
+    <view class="info">
+        <view class="uinfo">
+            <image class="avatar" src="{{userInfo.headimgurl}}"></image>
+            <view class="detail">
+                <view class="simple">
+                    <view class="nickname">{{userInfo.nickname}}</view>
+                    <view class="level">已做 {{userInfo.level}} 道</view>
+                </view>
+                <view class="jinbi">
+                    <image class="icon" src="{{icons.jinbi}}"></image>
+                    <view class="num gold">{{userInfo.gold_num}} 金币</view>
+                </view>
+                <view class="jinbi">
+                    <image class="icon" src="{{icons.balance}}"></image>
+                    <view class="num balance">{{userInfo.balance}} 元</view>
+                    <view bind:tap="goJfMall" class="with">兑换</view>
+                </view>
+            </view>
+        </view>
+    </view>
+    <view bind:tap="beginGame" class="begin">开始猜成语</view>
+    <view class="options">
+        <view bind:tap="goInvite" class="item getcoin">
+            <image src="{{icons.video}}"></image>
+            <text>免费金币</text>
+        </view>
+        <view bind:tap="showRankList" class="item rank">
+            <image src="{{icons.rank}}"></image>
+            <text>排行榜</text>
+        </view>
+        <view bind:tap="goMore" class="item getcoin">
+            <image src="{{icons.recommend}}"></image>
+            <text>更多好玩</text>
+        </view>
+        <view bind:tap="goQuestion" class="item rank">
+            <image src="{{icons.service}}"></image>
+            <text>常见问题</text>
+        </view>
+    </view>
+    <view class="ad" wx:if="{{setting.unit_id}}">
+        <ad unitId="{{setting.unit_id}}"></ad>
+        <view class="cl">开始游戏</view>
+    </view>
+</view>
+<login bind:cancel="pgLoginCancel" bind:confirm="pgLoginConfirm" wx:if="{{loginCompStatus}}"></login>
+<gzh bind:cancel="pgGzhCancel" gzhEwmImg="{{setting.gzh_ewm_img}}" gzhGuideText="{{setting.gzh_guide_text}}" wx:if="{{gzh_box_status}}"></gzh>
+<view catchtouchmove="ture" class="fanslist" wx:if="{{showRank}}">
+    <view class="box" style="height:{{boxH}}rpx;">
+        <view class="title">
+            <view class="options">
+                <view class="op" data-type="week">闯关排行榜</view>
+            </view>
+            <view bind:tap="closeRankList" class="close">
+                <image src="{{icons.close_515151}}"></image>
+            </view>
+        </view>
+        <scroll-view scrollY bindscrolltolower="getRankList" class="list" style="height: {{rankListH}}rpx;">
+            <view class="item" wx:for="{{rank.list}}" wx:key="index">
+                <view class="rank">{{index+1}}</view>
+                <image class="avatar" src="{{item.headimgurl}}"></image>
+                <view class="nickname">{{item.nickname}}</view>
+                <view class="num">{{item.level}} 题</view>
+            </view>
+            <view style="height:20rpx;"></view>
+        </scroll-view>
+        <view bind:tap="closeRankList" class="back">返回答题</view>
+    </view>
+</view>

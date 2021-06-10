@@ -1,0 +1,7 @@
+{
+    "navigationBarTitleText": "商品兑换",
+    "navigationBarTextStyle": "white",
+    "usingComponents": {
+        "login": "/wei_idiom/component/login/login"
+    }
+}

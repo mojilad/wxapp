@@ -1,0 +1,7 @@
+{
+    "navigationBarTitleText": "...",
+    "usingComponents": {
+        "login": "/wei_idiom/component/login/login",
+        "gzh": "/wei_idiom/component/gzh/gzh"
+    }
+}

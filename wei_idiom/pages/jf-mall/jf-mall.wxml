@@ -1,0 +1,32 @@
+<view class="container">
+    <view class="item-list">
+        <view style="margin-bottom:20rpx;" wx:if="{{setting.unit_id!=''}}">
+            <ad unitId="{{setting.unit_id}}"></ad>
+        </view>
+        <view class="item" wx:for="{{goodList}}" wx:key="item.id">
+            <image class="g-pic" src="{{item.image}}"></image>
+            <view class="g-info">
+                <view class="g-title">{{item.name}}</view>
+                <view class="g-price">
+                    <view class="g-price-credit">
+                        <text class="cost">{{item.price}}</text>
+                        <text class="original" decode="{{true}}">&ensp;市场价：{{item.market_price}}元&ensp;</text>
+                    </view>
+                </view>
+                <view class="op">
+                    <text class="amount">剩余：{{item.free_count}}/{{item.count}}件</text>
+                    <form bind:submit="doExchange" data-index="{{index}}" reportSubmit="true">
+                        <button class="subbtn" formType="submit" wx:if="{{item.free_count>0}}">立即兑换</button>
+                        <view class="subbtn subbtn-2" wx:else>立即兑换</view>
+                    </form>
+                </view>
+            </view>
+        </view>
+        <view bind:tap="copyKfWx" class="copykfwx" wx:if="{{''!=setting.kf_wxid}}">点击复制客服微信号</view>
+    </view>
+    <view class="tabbar">
+        <view bind:tap="goInfo" class="tab">我的信息</view>
+        <view bind:tap="goRecord" class="tab">兑换记录</view>
+    </view>
+</view>
+<login bind:cancel="pgLoginCancel" bind:confirm="pgLoginConfirm" wx:if="{{loginCompStatus}}"></login>

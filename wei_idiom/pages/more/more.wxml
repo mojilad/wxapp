@@ -1,0 +1,24 @@
+<view class="pg-container">
+    <view class="tasklist">
+        <view class="item" wx:if="{{''!=setting.gzh_img&&''!=setting.gzh_ewm_img}}">
+            <image class="iconp" src="{{setting.gzh_img}}"></image>
+            <view class="detail">
+                <view class="title">{{setting.gzh_name}}</view>
+                <view class="desc">{{setting.gzh_guide_text}}</view>
+            </view>
+            <view bind:tap="subscribeGzh" class="option">关注</view>
+        </view>
+        <view class="item" wx:for="{{adv_list}}" wx:key="id">
+            <image class="iconp" src="{{item.image}}"></image>
+            <view class="detail">
+                <view class="title">{{item.name}}</view>
+                <view class="desc">{{item.description}}</view>
+            </view>
+            <view bind:tap="goSee" class="option" data-index="{{index}}">去看看</view>
+        </view>
+        <view class="center-ad" wx:if="{{setting.pg_video_unit_id}}">
+            <ad adIntervals="30" adTheme="white" adType="video" unitId="{{setting.pg_video_unit_id}}"></ad>
+        </view>
+    </view>
+</view>
+<gzh bind:cancel="pgGzhCancel" gzhEwmImg="{{setting.gzh_ewm_img}}" gzhName="{{setting.gzh_name}}" wx:if="{{gzh_box_status}}"></gzh>

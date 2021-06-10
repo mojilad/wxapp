@@ -1,0 +1,7 @@
+<view class="com-page">
+    <view class="list">
+        <view bind:tap="_click" class="item" data-action="buildShareImg">生成分享图</view>
+        <button class="item" openType="share" plain="true">分享到群聊</button>
+        <view bind:tap="_click" class="item cancel" data-action="cancel">{{cancelText}}</view>
+    </view>
+</view>

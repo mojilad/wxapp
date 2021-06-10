@@ -1,0 +1,17 @@
+<view class="container">
+    <view class="form">
+        <view class="form-item">
+            <view class="field">姓名</view>
+            <input bindinput="infoInput" data-key="realname" placeholder="请输入姓名" placeholderStyle="color:#9C9C9C;" value="{{info.realname}}"></input>
+        </view>
+        <view class="form-item">
+            <view class="field">手机号</view>
+            <input bindinput="infoInput" data-key="mobile" placeholder="请输入手机号" placeholderStyle="color:#9C9C9C;" value="{{info.mobile}}"></input>
+        </view>
+        <view class="form-item">
+            <view class="field">微信号</view>
+            <input bindinput="infoInput" data-key="wxid" placeholder="请输入微信号" placeholderStyle="color:#9C9C9C;" value="{{info.wxid}}"></input>
+        </view>
+    </view>
+    <view bind:tap="doSave" class="sabebtn {{fillCompleted?'save':'no-save'}}">保存信息</view>
+</view>

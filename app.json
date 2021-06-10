@@ -1,0 +1,22 @@
+{
+  "pages": [
+    "wei_idiom/pages/index/index",
+    "wei_idiom/pages/detail/detail",
+    "wei_idiom/pages/jf-mall/jf-mall",
+    "wei_idiom/pages/invite/invite",
+    "wei_idiom/pages/info/info",
+    "wei_idiom/pages/record/record",
+    "wei_idiom/pages/question/question",
+    "wei_idiom/pages/more/more"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#5735B7",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#5735B7"
+  },
+  "navigateToMiniProgramAppIdList": [
+    "wx96cdd9f8c004c4a7",
+    "wx8cd7e0f8eca7f1e6"
+  ],
+  "sitemapLocation": "sitemap.json"
+}

@@ -1,0 +1,41 @@
+.com-page {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0,0,0,.6);
+}
+
+.list {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.list .options {
+    width: 592rpx;
+    overflow: hidden;
+}
+
+.options .close,.options .download {
+    width: 50%;
+    float: left;
+}
+
+.options .carrier {
+    border-radius: 50%;
+    background-color: #fff;
+}
+
+.options .carrier image {
+    float: left;
+    width: 80%;
+    height: 80%;
+    margin: 10%;
+}
+
+.options .close image {
+    float: right;
+}

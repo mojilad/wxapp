@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<manifest xmlns="http://www.we7.cc" versionCode="0.8,1.0">
+
+	<application setting="false">
+		<name><![CDATA[成语答题赚]]></name>
+		<identifie><![CDATA[wei_idiom]]></identifie>
+		<version><![CDATA[1.1.2]]></version>
+		<type><![CDATA[activity]]></type>
+		<ability><![CDATA[成语答题赚]]></ability>
+		<description><![CDATA[成语答题赚]]></description>
+		<author><![CDATA[集货地资源]]></author>
+		<url><![CDATA[http://www.jihuodi.com]]></url>
+	</application>
+
+	<platform>
+		<subscribes>
+		</subscribes>
+
+		<handles>
+		</handles>
+
+		<rule embed="false" />
+		<card embed="false" />
+		
+		<supports>
+			<item type="wxapp" />
+	
+		</supports>
+        <plugins></plugins> 
+        <plugin-main name="" />
+
+	</platform>
+
+	<bindings>
+		<menu>
+			<entry title="用户管理" do="user" state="user" direct="false"/>
+			<entry title="题目管理" do="topic" state="topic" direct="false"/>
+			<entry title="订单管理" do="order" state="order" direct="false"/>
+			<entry title="商品管理" do="good" state="good" direct="false"/>
+			<entry title="设置管理" do="setting" state="setting" direct="false"/>
+		</menu>
+		<page>
+			<entry title="首页" do="/wei_idiom/pages/index/index" state="" direct="false"/>
+		</page>
+
+	</bindings>
+
+	<permissions>
+	</permissions>
+
+	<install><![CDATA[
+CREATE TABLE IF NOT EXISTS `ims_wei_idiom_adv` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(10) unsigned NOT NULL,
+  `name` varchar(100) NOT NULL DEFAULT '',
+  `image` varchar(128) NOT NULL DEFAULT '',
+  `appid` varchar(50) NOT NULL DEFAULT '',
+  `path` varchar(255) NOT NULL DEFAULT '',
+  `insert_time` datetime DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1开启，0隐藏',
+  `description` varchar(100) NOT NULL DEFAULT '' COMMENT '描述',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS `ims_wei_idiom_answer` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(10) unsigned NOT NULL COMMENT '小程序id',
+  `openid` varchar(40) NOT NULL DEFAULT '',
+  `topic_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '题目id',
+  `insert_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uniacid` (`uniacid`,`openid`,`topic_id`),
+  KEY `openid` (`openid`)
+) ENGINE=InnoDB AUTO_INCREMENT=64287 DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS `ims_wei_idiom_eggs` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(10) unsigned NOT NULL DEFAULT '0',
+  `openid` varchar(50) NOT NULL DEFAULT '',
+  `topic_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `kkid` varchar(32) NOT NULL DEFAULT '',
+  `balance` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '获得的钱，单位：元',
+  `insert_time` datetime DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1:未领取,2:已领取',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `kkid` (`kkid`),
+  UNIQUE KEY `openid` (`openid`,`topic_id`,`uniacid`)
+) ENGINE=InnoDB AUTO_INCREMENT=5262 DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS `ims_wei_idiom_goods` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(10) unsigned NOT NULL DEFAULT '0',
+  `name` varchar(100) NOT NULL DEFAULT '',
+  `image` varchar(255) NOT NULL DEFAULT '',
+  `market_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '市场价',
+  `price` decimal(10,2) unsigned NOT NULL DEFAULT '0.00',
+  `count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '库存',
+  `free_count` varchar(255) DEFAULT NULL,
+  `type` varchar(32) NOT NULL DEFAULT '' COMMENT '类型',
+  `insert_time` datetime DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1上架,-1下架',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS `ims_wei_idiom_laws` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(10) unsigned NOT NULL DEFAULT '0',
+  `stage_start` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '阶段起始金额',
+  `stage_end` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '阶段结束金额',
+  `money_min` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '最少获得(元)',
+  `money_max` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '最多获得(元)',
+  `probability` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '概率',
+  `insert_time` datetime DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1开启，-1禁用',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS `ims_wei_idiom_orders` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(10) unsigned NOT NULL,
+  `openid` varchar(40) NOT NULL DEFAULT '',
+  `order_sn` varchar(32) NOT NULL DEFAULT '' COMMENT '提现单号',
+  `goods_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '商品id',
+  `form_id` varchar(64) NOT NULL DEFAULT '',
+  `goods_name` text NOT NULL,
+  `cost_balance` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '消耗余额',
+  `remark` varchar(255) NOT NULL DEFAULT '',
+  `send_time` datetime DEFAULT NULL COMMENT '发放时间',
+  `insert_time` datetime DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0:默认，1:已发货',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS `ims_wei_idiom_setting` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(10) unsigned NOT NULL DEFAULT '0',
+  `name` varchar(255) NOT NULL DEFAULT '' COMMENT '小程序名称',
+  `header_img` varchar(255) NOT NULL DEFAULT '' COMMENT '首页图标',
+  `unit_id` varchar(255) NOT NULL DEFAULT '' COMMENT '广告位id',
+  `pg_video_unit_id` varchar(50) NOT NULL DEFAULT '' COMMENT '视频广告id',
+  `per_invite_gold` int(10) unsigned NOT NULL DEFAULT '0',
+  `per_guess_gold` int(10) NOT NULL,
+  `per_video_gold` int(10) NOT NULL DEFAULT '0',
+  `screen_unit_id` varchar(100) NOT NULL DEFAULT '',
+  `screen_ad_status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '0关闭，1开启',
+  `video_unit_id` varchar(100) NOT NULL DEFAULT '',
+  `video_ad_status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '0关闭，1开启',
+  `day_video_num` int(10) unsigned NOT NULL DEFAULT '10' COMMENT '每天可看视频数量',
+  `register_gold` int(10) NOT NULL DEFAULT '5000' COMMENT '注册初始金币数',
+  `redbag_interval` tinyint(1) unsigned NOT NULL DEFAULT '5' COMMENT '出红包关数间隔',
+  `kf_wxid` varchar(32) NOT NULL DEFAULT '' COMMENT '客服微信号',
+  `topic_status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0未导入，1导入',
+  `insert_time` datetime DEFAULT NULL COMMENT '1展示，0隐藏',
+  `update_time` datetime DEFAULT NULL,
+  `topic_v2_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0:未导入，1:已导入',
+  `invite_text` varchar(255) NOT NULL DEFAULT '',
+  `invite_button_text` varchar(255) NOT NULL DEFAULT '',
+  `gzh_img` varchar(255) NOT NULL DEFAULT '',
+  `gzh_ewm_img` varchar(255) NOT NULL DEFAULT '',
+  `gzh_guide_text` varchar(255) NOT NULL DEFAULT '',
+  `gzh_name` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS `ims_wei_idiom_share` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(10) NOT NULL DEFAULT '0',
+  `title` varchar(100) NOT NULL DEFAULT '',
+  `scene` varchar(10) NOT NULL DEFAULT '',
+  `image` varchar(128) NOT NULL DEFAULT '' COMMENT '分享图',
+  `insert_time` datetime NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  KEY `uniacid` (`uniacid`)
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS `ims_wei_idiom_topic` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(10) unsigned NOT NULL,
+  `keyword` varchar(32) NOT NULL DEFAULT '' COMMENT '题目',
+  `key_index` tinyint(3) unsigned NOT NULL COMMENT '回答第几个字',
+  `alternatives` varchar(64) NOT NULL DEFAULT '' COMMENT '备选答案字符串',
+  `res_index` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `insert_time` datetime DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `status` tinyint(3) NOT NULL DEFAULT '1' COMMENT '1：正常，-1：删除',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=92055 DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS `ims_wei_idiom_users` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(10) unsigned NOT NULL DEFAULT '0',
+  `openid` varchar(40) NOT NULL DEFAULT '',
+  `vid` int(10) unsigned NOT NULL DEFAULT '0',
+  `invite_num` int(10) NOT NULL DEFAULT '0' COMMENT '邀请数量',
+  `nickname` varchar(50) CHARACTER SET utf8mb4 NOT NULL DEFAULT '',
+  `headimgurl` varchar(255) NOT NULL DEFAULT '',
+  `gender` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0:未知 1男 2女',
+  `realname` varchar(32) NOT NULL DEFAULT '',
+  `mobile` varchar(32) NOT NULL DEFAULT '',
+  `wxid` varchar(32) NOT NULL DEFAULT '',
+  `level` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '关卡',
+  `gold_num` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '金币',
+  `all_get_balance` int(10) NOT NULL DEFAULT '0' COMMENT '单位：分',
+  `balance` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '余额，单位：分',
+  `insert_time` datetime DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1：正常，-1：禁用',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uniq_openid_uniacid` (`openid`,`uniacid`)
+) ENGINE=InnoDB AUTO_INCREMENT=2098 DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS `ims_wei_idiom_video_log` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(10) unsigned NOT NULL DEFAULT '0',
+  `openid` varchar(40) NOT NULL DEFAULT '',
+  `insert_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `openid` (`openid`)
+) ENGINE=InnoDB AUTO_INCREMENT=2884 DEFAULT CHARSET=utf8;
+
+]]></install>
+	<uninstall><![CDATA[DROP TABLE IF EXISTS `ims_wei_idiom_adv`;
+DROP TABLE IF EXISTS `ims_wei_idiom_answer`;
+DROP TABLE IF EXISTS `ims_wei_idiom_eggs`;
+DROP TABLE IF EXISTS `ims_wei_idiom_goods`;
+DROP TABLE IF EXISTS `ims_wei_idiom_laws`;
+DROP TABLE IF EXISTS `ims_wei_idiom_orders`;
+DROP TABLE IF EXISTS `ims_wei_idiom_setting`;
+DROP TABLE IF EXISTS `ims_wei_idiom_share`;
+DROP TABLE IF EXISTS `ims_wei_idiom_topic`;
+DROP TABLE IF EXISTS `ims_wei_idiom_users`;
+DROP TABLE IF EXISTS `ims_wei_idiom_video_log`;
+]]></uninstall>
+	<upgrade><![CDATA[upgrade.php]]></upgrade>
+
+</manifest>

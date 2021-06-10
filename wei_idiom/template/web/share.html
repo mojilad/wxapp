@@ -1,0 +1,220 @@
+{template 'common/header'}
+<ul class="nav nav-tabs">
+    <li {if $op =='basic'} class="active" {/if}>
+    <a href="{php echo $this->createWebUrl('Setting', array('op'=>'basic'));}">基础设置</a>
+    </li>
+    <li {if $op =='law_list'} class="active" {/if}>
+    <a href="{php echo $this->createWebUrl('Law', array('op'=>'law_list'));}">奖励配置</a>
+    </li>
+    <li {if $op =='adv_list'} class="active" {/if}>
+    <a href="{php echo $this->createWebUrl('Adv', array('op' => 'adv_list'));}">小程序推广</a>
+    </li>
+    <li {if $op =='share_list'} class="active" {/if}>
+    <a href="{php echo $this->createWebUrl('Share', array('op'=>'share_list'));}">分享文案</a>
+    </li>
+</ul>
+<style>
+    th{
+        text-align: center !important;
+    }
+    td{
+        text-align: center !important;
+        white-space: normal !important;
+        word-break: break-all !important;
+        vertical-align: middle !important;
+    }
+    .label {
+        cursor: pointer;
+    }
+    .main .form-horizontal .form-group{margin-bottom:15px;}
+    .main .form-horizontal .modal .form-group{margin-bottom:15px;}
+    #modal-confirmsend .control-label{margin-top:0;}
+</style>
+{if $op == 'share_list'}
+<div class="main">
+    <div class="panel panel-default">
+        <div class="panel-heading">分享文案列表</div>
+        <div class="panel-body">
+            <div class="table-responsive panel-body">
+                <table class="table table-hover" style="min-width: 200px;">
+                    <thead class="navbar-inner">
+                    <tr>
+                        <th>分享标题</th>
+                        <th>场景</th>
+                        <th>分享图</th>
+                        <th>添加时间</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $vo}
+                    <tr>
+                        <td>{$vo['title']}</td>
+                        <td>{$vo['scene_desc']}</td>
+                        <td><img src="{$vo['image']}" style="max-height: 100px;"></td>
+                        <td>{$vo['insert_time']}</td>
+                        <td>
+                            <label share_id="{$vo['id']}" status="{$vo['status']}" class="label change_status label-default {if $vo['status'] == '1'}label-info{else}label-default{/if}">{if $vo['status'] == '1'}启用{else}禁用{/if}</label>
+                        </td>
+                        <td>
+                            <a class="btn btn-danger btn-sm" onclick="del(this,{$vo['id']});"><i class="fa fa-times"></i> 删除</a>
+                        </td>
+                    </tr>
+                    {/loop}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+<a class="btn btn-info" href="{php echo $this->createWebUrl('Share', array('op'=>'share_add'));}" role="button">新增文案</a>
+</div>
+<link href="https://cdn.bootcss.com/sweetalert/1.1.3/sweetalert.min.css" rel="stylesheet">
+<script src="https://cdn.bootcss.com/sweetalert/1.1.3/sweetalert.min.js"></script>
+<script>
+    function del(object,id) {
+        swal({
+                title: "删除后将无法找回，您确定要删除吗？",
+                text: "删除操作不可逆，请谨慎操作！",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#a1d9f2",
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                closeOnConfirm: false
+            },
+            function(){
+                $.ajax({
+                    url:"{php echo $this->createWebUrl('Share', array('op'=>'delete'));}",
+                    type:'post',
+                    data:{id:id},
+                    async: false,
+                    success:function(res){
+                        if(res.code === 0){
+                            swal(res.message, "", "success");
+                            setTimeout(function(){
+                                $(object).parent().parent().remove()
+                            },100);
+                        }else{
+                            swal(res.message, "", "error");
+                        }
+                    }
+                });
+            });
+    }
+
+
+    //禁用/启用
+    $('.change_status').click(function(){
+        var _that = $(this)
+        var data = {}
+        var status = _that.attr('status')
+        data.status = status === '1' ? '0' : '1'
+        data.share_id = _that.attr('share_id')
+        $.ajax({
+            url:"{php echo $this->createWebUrl('Share',array('op'=>'change_status'))}",
+            type:'post',
+            data:data,
+            async: false,
+            success:function(res){
+                if(res.code === 0) {
+                    if(status === '1') {
+                        _that.removeClass("label-info").addClass("label-default").attr('status',data.status).html('禁用');
+                    } else {
+                        _that.addClass("label-info").removeClass("label-default").attr('status',data.status).html('启用');
+
+                    }
+                } else {
+                    swal(res.message, "", "error");
+                }
+            }
+        });
+    });
+</script>
+{elseif $op == 'share_add'}
+<div class="main">
+<div class="panel panel-default">
+    <div class="panel-heading">新增文案</div>
+    <div class="panel-body">
+        <form action="" method="post" class="form-horizontal form" id="form">
+            <input type="hidden" name="c" value="{$_GPC['c']}">
+            <input type="hidden" name="a" value="{$_GPC['a']}">
+            <input type="hidden" name="do" value="{$_GPC['do']}">
+            <input type="hidden" name="m" value="{$_GPC['m']}">
+            <input type="hidden" name="op" value="{$op}">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">分享标题 <font color="red">*</font></label>
+                <div class="col-sm-8">
+                    <input type="text" name="data[title]" class="form-control" value="" placeholder="如：一分钟内答对算我输~"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">使用场景 <font color="red">*</font></label>
+                <div class="col-xs-12 col-sm-8">
+                    <label class="radio radio-inline">
+                        <input type="radio" name="data[scene]" value="home" checked> 首页分享
+                    </label>
+                    <label class="radio radio-inline">
+                        <input type="radio" name="data[scene]" value="invite"> 邀请页分享
+                    </label>
+                    <label class="radio radio-inline">
+                        <input type="radio" name="data[scene]" value="guess"> 猜题页分享
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">分享卡片图片 <font color="red">*</font></label>
+                <div class="col-sm-8">
+                    {php echo tpl_form_field_image('data[image]');}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">使用场景 <font color="red">*</font></label>
+                <div class="col-xs-12 col-sm-8">
+                    <label class="radio radio-inline">
+                        <input type="radio" name="data[status]" value="1" checked> 启用
+                    </label>
+                    <label class="radio radio-inline">
+                        <input type="radio" name="data[status]" value="0"> 禁用
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-8">
+                    <input name="submit" type="submit" value="提交" class="btn btn-primary" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+<script type="text/javascript">
+    require(['jquery', 'util'], function($, util){
+        $(function(){
+            $('#form').submit(function(){
+                var result = true;
+                if($('input[name="data[title]"]').val() == ''){
+                    result = false;
+                    util.message('请输入分享标题.');
+                } else if($('input[name="data[scene]"]:checked').val() == null){
+                    result = false;
+                    util.message('请选择使用场景.');
+                } else if($('input[name="data[image]"]').val() == ''){
+                    result = false;
+                    util.message('请选择分享图片.');
+                }
+                return result;
+            });
+
+        });
+    });
+</script>
+{/if}
+{template 'common/footer'}

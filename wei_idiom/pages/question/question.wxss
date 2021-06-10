@@ -1,0 +1,70 @@
+.pg-container {
+    width: 750rpx;
+    overflow: hidden;
+}
+
+.pg-container .list {
+    width: 690rpx;
+    margin-left: 30rpx;
+    margin-top: 30rpx;
+    font-size: 30rpx;
+}
+
+.pg-container .list .item {
+    line-height: 90rpx;
+    background-color: #ffffff;
+    margin-bottom: 30rpx;
+}
+
+.list .item .top {
+    height: 90rpx;
+}
+
+.list .item .q {
+    width: 610rpx;
+    margin-left: 24rpx;
+    color: #333333;
+    float: left;
+}
+
+.list .item .active {
+    color: #A3A3A3;
+}
+
+.list .item .expand {
+    margin-top: 27rpx;
+    width: 38rpx;
+    height: 36rpx;
+    float: left;
+}
+
+.list .item .down {
+    border-top: 2rpx solid #D9D9D9;
+    overflow: hidden;
+}
+
+.list .item .a {
+    margin: 24rpx;
+    line-height: 44rpx;
+    font-size: 26rpx;
+}
+
+.back {
+    border-radius: 40rpx;
+    margin-left: 30rpx;
+    background-color: #5735B7;
+    margin-top: 20rpx;
+    width: 690rpx;
+    height: 80rpx;
+    line-height: 80rpx;
+    color: #ffffff;
+    text-align: center;
+    font-size: 32rpx;
+}
+
+.ad {
+    width: 690rpx;
+    border-radius: 12rpx;
+    overflow: hidden;
+    margin: 30rpx;
+}

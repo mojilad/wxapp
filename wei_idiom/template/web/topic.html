@@ -1,0 +1,266 @@
+{template 'common/header'}
+
+<ul class="nav nav-tabs">
+    <li {if $op =='display'} class="active" {/if}>
+    <a href="{php echo $this->createWebUrl('Topic', array('op'=>'display'));}">题库列表</a>
+    </li>
+    <li {if $op == 'import'} class="active" {/if}>
+    <a href="{php echo $this->createWebUrl('Topic', array('op'=>'import'));}">题库导入</a>
+    </li>
+    <li {if $op == 'bundle'} class="active" {/if}>
+    <a href="{php echo $this->createWebUrl('Topic', array('op'=>'bundle'));}">手动添加</a>
+    </li>
+</ul>
+<style>
+    th{
+        text-align: center !important;
+    }
+    td{
+        text-align: center !important;
+        white-space: normal !important;
+        word-break: break-all !important;
+        vertical-align: middle !important;
+    }
+    .main .form-horizontal .form-group{margin-bottom:15px;}
+    .main .form-horizontal .modal .form-group{margin-bottom:15px;}
+
+</style>
+{if $op == 'display'}
+<script src="https://cdn.bootcss.com/sweetalert/1.1.3/sweetalert.min.js"></script>
+<link href="https://cdn.bootcss.com/sweetalert/1.1.3/sweetalert.min.css" rel="stylesheet">
+<div class="main">
+    <div class="panel panel-default">
+        <div class="panel-heading">题库列表</div>
+        <div class="panel-body">
+            <div class="table-responsive panel-body">
+                <table class="table table-hover" style="min-width: 200px;min-height: 45px;">
+                    <thead class="navbar-inner">
+                    <tr>
+                        <th>ID</th>
+                        <th>题目</th>
+                        <th>猜字序号</th>
+                        <th>答案</th>
+                        <th>答案序号</th>
+                        <th>入库时间</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $u}
+                    <tr style="min-height: 50px;">
+                        <td>{$u['id']}</td>
+                        <td style="max-width: 32px; max-height: 32px;">{$u['keyword']}</td>
+                        <td>{$u['key_index']}</td>
+                        <td>{$u['alternatives']}</td>
+                        <td>{$u['res_index']}</td>
+                        <td>{$u['insert_time']}</td>
+                        <td>
+                            <label  class="label {if $u['status'] == 1}label-info{else}label-default{/if}" href="javascript:0;">
+                                {if $u['status'] == 1}启用{else}禁用{/if}
+                            </label>
+                        </td>
+                        <td>
+                            <a href="javascript:;" class="btn btn-danger btn-sm delete"  onclick="deleteStall(this,{$u['id']});">删除</a>
+                        </td>
+                    </tr>
+                    {/loop}
+                    {if empty($list)}
+                    <tr>
+                        <td colspan="5">
+                            题库为空
+                        </td>
+                    </tr>
+                    {/if}
+                    </tbody>
+                </table>
+                {$pager}
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    function deleteStall(object, topic_id) {
+        swal({
+            title: "您确定要删除该题目吗",
+            text: "删除后不可恢复，谨慎操作！",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#a1d9f2",
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            closeOnConfirm: false
+        }, function(){
+            $.ajax({
+                url:"{php echo $this->createWebUrl('Topic', array('op'=>'delete'));}",
+                type:'post',
+                data:{id:topic_id},
+                async: false,
+                success:function(res){
+                    if(res.code === 0){
+                        swal(res.message, "", "success");
+                        setTimeout(function(){
+                            $(object).parent().parent().remove()
+                        },100);
+                    }else{
+                        res(res.message, "", "error");
+                    }
+                }
+            });
+        });
+    }
+</script>
+
+{elseif $op == 'import'}
+<div class="main">
+<div class="panel panel-default">
+    <div class="panel-heading">题库导入</div>
+    <div class="panel-body">
+        <form action="" method="post" class="form-horizontal" role="form" id="import-form1">
+            <input type="hidden" name="c" value="{$_GPC['c']}">
+            <input type="hidden" name="a" value="{$_GPC['a']}">
+            <input type="hidden" name="do" value="{$_GPC['do']}">
+            <input type="hidden" name="m" value="{$_GPC['m']}">
+            <input type="hidden" name="op" value="{$op}">
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-8">备注：本版本题目偏难，备选词为同音字，导入后无法删除。题量:2800道</div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">题库v1导入状态 <font color="red">*</font></label>
+                <div class="col-sm-8">
+                    {if $setting['topic_status'] == 1}
+                    <input type="text" class="form-control" value="已导入" disabled="disabled">
+                    {else}
+                    <input type="text" class="form-control" value="未导入" disabled="disabled">
+                    {/if}
+                </div>
+            </div>
+            {if $setting['topic_status'] == 0}
+            <div class="form-group">
+                <label class="col-sm-2 control-label" style="margin-right:20px;">操作 <font color="red">*</font></label>
+                <input name="import_v1" type="submit" value="立即导入" class="btn btn-info"/>
+                <input type="hidden" name="token" value="{$_W['token']}"/>
+            </div>
+            {/if}
+        </form>
+    </div>
+    <div class="panel-body">
+        <form action="" method="post" class="form-horizontal" role="form" id="import-form2">
+            <input type="hidden" name="c" value="{$_GPC['c']}">
+            <input type="hidden" name="a" value="{$_GPC['a']}">
+            <input type="hidden" name="do" value="{$_GPC['do']}">
+            <input type="hidden" name="m" value="{$_GPC['m']}">
+            <input type="hidden" name="op" value="{$op}">
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-8">备注：本版本题目偏简单，导入后无法删除。题量：5000道</div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">导入状态 <font color="red">*</font></label>
+                <div class="col-sm-8">
+                    {if $setting['topic_v2_status'] == 1}
+                    <input type="text" class="form-control" value="已导入" disabled="disabled">
+                    {else}
+                    <input type="text" class="form-control" value="未导入" disabled="disabled">
+                    {/if}
+                </div>
+            </div>
+            {if $setting['topic_v2_status'] == 0}
+            <div class="form-group">
+                <label class="col-sm-2 control-label" style="margin-right:20px;">操作 <font color="red">*</font></label>
+                <input name="import_v2" type="submit" value="立即导入" class="btn btn-info"/>
+                <input type="hidden" name="token" value="{$_W['token']}"/>
+            </div>
+            {/if}
+        </form>
+    </div>
+</div>
+</div>
+{elseif $op == 'bundle'}
+<div class="main">
+    <form action="" method="post" class="form-horizontal form" id="add-form">
+        <input type="hidden" name="c" value="{$_GPC['c']}">
+        <input type="hidden" name="a" value="{$_GPC['a']}">
+        <input type="hidden" name="do" value="{$_GPC['do']}">
+        <input type="hidden" name="m" value="{$_GPC['m']}">
+        <div class="panel panel-default">
+            <div class="panel-heading">手动添加</div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">题目 <font color="red">*</font></label>
+                    <div class="col-sm-8">
+                        <input type="text" name="data[keyword]" class="form-control" placeholder="请输入4字成语" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">猜字序号 <font color="red">*</font></label>
+                    <div class="col-sm-8">
+                        <label class="radio radio-inline">
+                            <input type="radio" name="data[key_index]" value="0" checked /> 1
+                        </label>
+                        <label class="radio radio-inline">
+                            <input type="radio" name="data[key_index]" value="1" /> 2
+                        </label>
+                        <label class="radio radio-inline">
+                            <input type="radio" name="data[key_index]" value="2" /> 3
+                        </label>
+                        <label class="radio radio-inline">
+                            <input type="radio" name="data[key_index]" value="3" /> 4
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">备选答案 <font color="red">*</font></label>
+                    <div class="col-sm-8">
+                        <input type="text" name="data[alternatives]" class="form-control" placeholder="使用英文逗号分隔，如：见,现,砚,显" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">答案序号 <font color="red">*</font></label>
+                    <div class="col-sm-8">
+                        <label class="radio radio-inline">
+                            <input type="radio" name="data[res_index]" value="0" checked /> 1
+                        </label>
+                        <label class="radio radio-inline">
+                            <input type="radio" name="data[res_index]" value="1" /> 2
+                        </label>
+                        <label class="radio radio-inline">
+                            <input type="radio" name="data[res_index]" value="2" /> 3
+                        </label>
+                        <label class="radio radio-inline">
+                            <input type="radio" name="data[res_index]" value="3" /> 4
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-xs-12 col-sm-9 col-md-10 col-lg-10 col-sm-offset-3 col-md-offset-2 col-lg-offset-2">
+                        <input name="submit" type="submit" value="提交" class="btn btn-primary" />
+                        <input type="hidden" name="token" value="{$_W['token']}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    require(['jquery', 'util'], function($, util){
+        $(function(){
+            $('#add-form').submit(function(){
+                var result = true;
+                if($('input[name="data[keyword]"]').val() == ''){
+                    result = false;
+                    util.message('请填写题目.');
+                } else if($('input[name="data[alternatives]"]').val() == ''){
+                    result = false;
+                    util.message('请填写备选答案.');
+                }
+                return result;
+            });
+        });
+    });
+</script>
+{/if}
+{template 'common/footer'}

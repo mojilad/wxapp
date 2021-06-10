@@ -1,0 +1,104 @@
+page {
+    background-color: #5735B7;
+    color: white;
+}
+
+.pg-container {
+    margin-left: 35rpx;
+    margin-right: 35rpx;
+    box-sizing: border-box;
+    padding-bottom: 26rpx;
+}
+
+.boxs {
+    margin-top: 30rpx;
+    width: 680rpx;
+    height: 216rpx;
+    border-radius: 16rpx;
+    color: #666666;
+    background-color: rgba(255,255,255,.96);
+}
+
+.boxs .title {
+    height: 100rpx;
+    font-size: 24rpx;
+    line-height: 100rpx;
+    text-align: center;
+}
+
+.boxs .title .num {
+    font-weight: bold;
+    font-size: 28rpx;
+    color: #FF6662;
+}
+
+.boxs .list .item {
+    width: 74rpx;
+    height: 74rpx;
+    float: left;
+    background-color: #D5DDF0;
+    border-radius: 50%;
+    margin-left: 20rpx;
+}
+
+.boxs .list .more {
+    background-color: #999999;
+}
+
+.boxs .list .item image {
+    width: 54rpx;
+    height: 54rpx;
+    margin: 10rpx;
+}
+
+.boxs .list .avatar image {
+    width: 74rpx;
+    height: 74rpx;
+    margin: 0;
+    border-radius: 50%;
+}
+
+.jinbi {
+    margin-top: 30rpx;
+    font-size: 30rpx;
+    color: #FFA34C;
+    height: 72rpx;
+    border-radius: 36rpx;
+    text-align: center;
+    line-height: 72rpx;
+    color: #FF6662;
+    font-weight: bold;
+    background-color: rgba(255,255,255,.96);
+}
+
+.invite {
+    margin-top: 50rpx;
+    height: 100rpx;
+    width: 680rpx;
+    border: none;
+    background-color: #FF6662;
+    border-radius: 60rpx;
+    line-height: 100rpx;
+    font-size: 36rpx;
+    font-weight: bold;
+    color: white;
+    padding: 0;
+    margin-bottom: 40rpx;
+}
+
+.invite .box text {
+    display: block;
+    float: left;
+    width: 680rpx;
+    text-align: center;
+    letter-spacing: 2rpx;
+}
+
+.seead {
+    background-color: #5191FD;
+}
+
+.ad {
+    border-radius: 12rpx;
+    overflow: hidden;
+}

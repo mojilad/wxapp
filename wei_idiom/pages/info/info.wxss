@@ -1,0 +1,84 @@
+page {
+    background-color: #F6F7F9;
+}
+
+.container {
+    box-sizing: border-box;
+    width: 100%;
+    overflow: hidden;
+}
+
+.form {
+    margin-top: 10rpx;
+    background-color: #fff;
+    padding-top: 12rpx;
+    width: 100%;
+    font-size: 28rpx;
+    overflow: hidden;
+    padding-left: 30rpx;
+}
+
+.form .form-item {
+    width: 720rpx;
+    height: 88rpx;
+    line-height: 88rpx;
+    border-bottom: 1rpx solid #E0E1E3;
+}
+
+.form .form-item .field {
+    color: #727272;
+    float: left;
+    width: 178rpx;
+}
+
+.form .form-item input {
+    display: block;
+    float: left;
+    height: 88rpx;
+    width: 540rpx;
+    color: #727272;
+}
+
+.form .form-item .picker {
+    color: #727272;
+}
+
+.form .form-item textarea {
+    width: 500rpx;
+    display: block;
+    float: left;
+}
+
+.form .detail {
+    padding-top: 30rpx;
+    height: 132rpx;
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+    line-height: 28rpx;
+}
+
+.form .detail textarea {
+    font-size: 28rpx;
+    outline: none;
+    height: 132rpx;
+}
+
+.sabebtn {
+    height: 100rpx;
+    width: 100%;
+    color: white;
+    line-height: 100rpx;
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    font-size: 32rpx;
+}
+
+.save {
+    background-color: #FF2742;
+}
+
+.no-save {
+    background-color: #CBCBCB;
+}

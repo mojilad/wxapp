@@ -1,0 +1,232 @@
+{template 'common/header'}
+<ul class="nav nav-tabs">
+    <li {if $op =='display'} class="active" {/if}>
+    <a href="{php echo $this->createWebUrl('Order', array('op'=>'display'));}">兑换列表</a>
+    </li>
+    {if $op == 'detail'}
+    <li class="active">
+    <a href="javascript:;">订单详情</a>
+    </li>
+    {/if}
+</ul>
+<style>
+    th{
+        text-align: center !important;
+    }
+    td{
+        text-align: center !important;
+        white-space: normal !important;
+        word-break: break-all !important;
+        vertical-align: middle !important;
+    }
+    .main .form-horizontal .form-group{margin-bottom:5px;}
+    .main .form-horizontal .modal .form-group{margin-bottom:15px;}
+    #modal-confirmsend .control-label{margin-top:0;}
+</style>
+<link href="https://cdn.bootcss.com/sweetalert/1.1.3/sweetalert.min.css" rel="stylesheet">
+<script>
+    require.config({
+        paths: {
+            "sweetalert":"https://cdn.bootcss.com/sweetalert/1.1.3/sweetalert.min",
+        }
+    });
+</script>
+{if $op == 'display'}
+<div class="main">
+    <div class="panel panel-default">
+        <div class="panel-heading">订单列表</div>
+        <div class="panel-body">
+            <div class="table-responsive panel-body">
+                <table class="table table-hover" style="min-width: 200px;">
+                    <thead class="navbar-inner">
+                    <tr>
+                        <th>ID</th>
+                        <th>微信昵称</th>
+                        <th>头像</th>
+                        <th>姓名 / 手机号 / 微信号</th>
+                        <th>商品名</th>
+                        <th>兑换消耗</th>
+                        <th>申请时间</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $u}
+                    <tr>
+                        <td>{$u['id']}</td>
+                        <td>{$u['user']['nickname']}</td>
+                        <td><img src="{$u['user']['headimgurl']}" style="max-width: 32px; max-height: 32px;"></td>
+                        <td>{$u['user']['realname']}<br/>{$u['user']['mobile']}<br/>{$u['user']['wxid']}</td>
+                        <td>{$u['goods_name']}</td>
+                        <td>{$u['cost_balance']}</td>
+                        <td>{$u['insert_time']}</span></td>
+                        <td>
+                            {if $u['status'] == '1'}
+                            <label class="label label-info" href="javascript:0;">已发货</label>
+                            {else}
+                            <label class="label label-default" href="javascript:0;">未发货</label>
+                            {/if}
+                        </td>
+                        <td>
+                            {if $u['status'] == '0'}
+                            <button class="btn btn-info btn-sm confirm" data-id="{$u['id']}" >发货</button>
+                            {/if}
+                            <button  class="btn btn-primary btn-sm detail" data-id="{$u['id']}" >详情</button>
+                        </td>
+                    </tr>
+                    {/loop}
+                    {if empty($list)}
+                    <tr>
+                        <td colspan="8">
+                            没有用户
+                        </td>
+                    </tr>
+                    {/if}
+                    </tbody>
+                </table>
+                {$pager}
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    require(['jquery', 'util', 'sweetalert'], function($, util, sw) {
+        $('.detail').click(function() {
+            let id = $(this).data('id');
+            let locateTo = "{php echo $this->createWebUrl('Order', array('op'=>'detail'));}"+`&id=${id}`;
+            window.location.href = locateTo
+        });
+
+        $('.confirm').click(function() {
+            let id = $(this).data('id');
+            let confirmWithObj = {
+                title: "发货确认",
+                text: "务必确认已经给用户真的发货了，防止用户举报。",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                cancelButtonText : " 取消 ",
+                confirmButtonText: "确认无误",
+                closeOnConfirm: false
+            };
+            sw(confirmWithObj, function () {
+                $.ajax({
+                    url: "{php echo $this->createWebUrl('Order', array('op'=>'confirm'));}",
+                    type: 'post',
+                    data: {id: id},
+                    success: function (res) {
+                        if (res.code === 0) {
+                            sw("确认成功", "", "success");
+                            setTimeout(function () {
+                                window.location.reload();
+                            }, 500);
+                        } else {
+                            sw(res.message, "", "error")
+                        }
+                    }
+                })
+            });
+        });
+    });
+</script>
+{else if $op == 'detail'}
+<div class="main">
+    <div class="panel panel-default">
+        <div class="panel-heading">兑换详情</div>
+        <div class="panel-body">
+            <form action="./index.php" method="get" class="form-horizontal" role="form">
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">消耗金额 :</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <p class="form-control-static">{$record['cost_balance']} 元</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">商品 :</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <p class="form-control-static">{$record['goods_name']} 元</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">兑换时间 :</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <p class="form-control-static">{$record['insert_time']}</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">到账时间:</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <p class="form-control-static">{$record['send_time']}</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">状态 :</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <p class="form-control-static">
+                            {if $record['status'] == 0}<span class="label label-warning">未发货</span>{/if}
+                            {if $record['status'] == 1}<span class="label label-info">已发货</span>{/if}
+                        </p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">用户信息</div>
+        <div class="panel-body">
+            <form action="./index.php" method="get" class="form-horizontal" role="form">
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">头像 :</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <p class="form-control-static"><img style="width: 30px;" src="{php echo tomedia($user['headimgurl']);}"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">微信昵称 :</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <p class="form-control-static">{$user['nickname']}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">OPENID :</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <p class="form-control-static">{$user['openid']}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">闯关数 :</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <p class="form-control-static">{$user['level']}</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">金币数量 :</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <p class="form-control-static">{$user['gold_num']}</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">奖励余额 :</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <p class="form-control-static">{$user['balance']} 元</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">累积获取 :</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <p class="form-control-static">{$user['all_get_balance']} 元</p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{/if}
+{template 'common/footer'}

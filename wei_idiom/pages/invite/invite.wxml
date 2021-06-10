@@ -1,0 +1,32 @@
+<view class="pg-container">
+    <view class="boxs">
+        <view class="title">{{setting.invite_text}}</view>
+        <view class="list">
+            <block wx:if="{{inviteList.length>0}}">
+                <view class="item avatar" wx:for="{{inviteList}}" wx:key="index">
+                    <image src="{{item.headimgurl}}"></image>
+                </view>
+            </block>
+            <view class="item" wx:for="{{emptyList}}" wx:key="index">
+                <image src="{{icons.fans}}"></image>
+            </view>
+            <view class="item more">
+                <image src="{{icons.more}}"></image>
+            </view>
+        </view>
+    </view>
+    <view class="jinbi">我的金币：{{userInfo.gold_num}}</view>
+    <button class="invite xh_scale" openType="share">
+        <view class="box ">
+            <text class="">{{setting.invite_button_text}}</text>
+        </view>
+    </button>
+    <view bind:tap="showRewardVideoAd" class="invite seead" formType="submit" wx:if="{{showVideoAdButton}}">
+        <view class="box ">
+            <text class="">观看视频每次奖励{{setting.per_video_gold}}金币</text>
+        </view>
+    </view>
+    <view class="ad" wx:if="{{setting.pg_video_unit_id}}">
+        <ad adTheme="white" adType="video" unitId="{{setting.pg_video_unit_id}}"></ad>
+    </view>
+</view>

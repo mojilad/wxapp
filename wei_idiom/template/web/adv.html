@@ -1,0 +1,323 @@
+{template 'common/header'}
+<ul class="nav nav-tabs">
+    <li {if $op =='basic'} class="active" {/if}>
+    <a href="{php echo $this->createWebUrl('Setting', array('op'=>'basic'));}">基础设置</a>
+    </li>
+    <li {if $op =='law_list'} class="active" {/if}>
+    <a href="{php echo $this->createWebUrl('Law', array('op'=>'law_list'));}">奖励配置</a>
+    </li>
+    <li {if $op =='adv_list'} class="active" {/if}>
+    <a href="{php echo $this->createWebUrl('Adv', array('op' => 'adv_list'));}">小程序推广</a>
+    </li>
+    <li {if $op =='share_list'} class="active" {/if}>
+    <a href="{php echo $this->createWebUrl('Share', array('op'=>'share_list'));}">分享文案</a>
+    </li>
+    {if $op == 'adv_edit'}
+    <li class="active">
+    <a href="javascript:;">编辑推广</a>
+    </li>
+    {/if}
+</ul>
+<style>
+    th{
+        text-align: center !important;
+    }
+    td{
+        text-align: center !important;
+        white-space: normal !important;
+        word-break: break-all !important;
+        vertical-align: middle !important;
+    }
+    .label {
+        cursor: pointer;
+    }
+    .main .form-horizontal .form-group{margin-bottom:15px;}
+    .main .form-horizontal .modal .form-group{margin-bottom:15px;}
+</style>
+<link href="https://cdn.bootcss.com/sweetalert/1.1.3/sweetalert.min.css" rel="stylesheet">
+<script>
+    require.config({
+        paths: {
+            "sweetalert":"https://cdn.bootcss.com/sweetalert/1.1.3/sweetalert.min",
+        }
+    });
+</script>
+{if $op == 'adv_list'}
+<div class="main">
+    <div class="panel panel-default">
+        <div class="panel-heading">推广列表</div>
+        <div class="panel-body">
+            <div class="table-responsive panel-body">
+                <table class="table table-hover" style="min-width: 200px;">
+                    <thead class="navbar-inner">
+                    <tr>
+                        <th>ID</th>
+                        <th>小程序名称</th>
+                        <th>描述</th>
+                        <th>APPID</th>
+                        <th>分享图</th>
+                        <th>添加时间</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $vo}
+                    <tr>
+                        <td>{$vo['id']}</td>
+                        <td>{$vo['name']}</td>
+                        <td>{$vo['description']}</td>
+                        <td>{$vo['appid']}</td>
+                        <td><img src="{php echo tomedia($vo['image'])}" style="max-height: 100px;"></td>
+                        <td>{$vo['insert_time']}</td>
+                        <td>
+                            {if $vo['status'] == '1'}
+                            <label data-id="{$vo['id']}" data-status="{$vo['status']}" class="label label-info">启用</label>
+                            {else if $vo['status'] == '0'}
+                            <label data-id="{$vo['id']}" data-status="{$vo['status']}" class="label label-default">禁用</label>
+                            {/if}
+                        </td>
+                        <td>
+                            <a class="btn btn-info btn-sm edit" data-id="{$vo['id']}"><i class="fa fa-edit"></i>编辑</a>
+                            <a class="btn btn-danger btn-sm delete" data-id="{$vo['id']}"><i class="fa fa-times"></i> 删除</a>
+                        </td>
+                    </tr>
+                    {/loop}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <a class="btn btn-info" href="{php echo $this->createWebUrl('Adv', array('op'=>'adv_add'));}" role="button">新增推广</a>
+</div>
+<script>
+    require(['jquery', 'util', 'sweetalert'], function($, util, sw){
+        $('.delete').click(function(){
+            let id = $(this).data('id');
+            let confirmWithObj = {
+                title: "删除确认",
+                text: "一旦删除无法恢复，请知悉。",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                cancelButtonText : " 取消 ",
+                confirmButtonText: "确认无误",
+                closeOnConfirm: false
+            };
+            sw(confirmWithObj, function () {
+                let data = {
+                    id : id,
+                };
+                $.ajax({
+                    url:"{php echo $this->createWebUrl('Adv', array('op'=>'delete'));}",
+                    type:'post',
+                    data:data,
+                    success:function(res){
+                        if(res.code === 0){
+                            sw("确认成功", "", "success");
+                            setTimeout(function(){
+                                window.location.reload();
+                            },500);
+                        } else {
+                            sw(res.message, "", "error")
+                        }
+                    }
+                })
+            });
+        });
+
+        $('.edit').click(function(){
+            let id = $(this).data('id');
+            let url = "{php echo $this->createWebUrl('Adv', array('op'=>'adv_edit'));}" + `&id=${id}`;
+            window.location.href = url
+        });
+    });
+
+</script>
+{elseif $op == 'adv_add'}
+<div class="main">
+    <div class="panel panel-default">
+        <div class="panel-heading">新建推广</div>
+        <div class="panel-body">
+            <form action="" method="post" class="form-horizontal form" id="form">
+                <input type="hidden" name="c" value="{$_GPC['c']}">
+                <input type="hidden" name="a" value="{$_GPC['a']}">
+                <input type="hidden" name="do" value="{$_GPC['do']}">
+                <input type="hidden" name="m" value="{$_GPC['m']}">
+                <input type="hidden" name="op" value="{$op}">
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 col-lg-2 control-label">小程序名称 <font color="red">*</font></label>
+                    <div class="col-sm-8">
+                        <input type="text" name="data[name]" class="form-control" value="" placeholder="请输入小程序名称" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 col-lg-2 control-label">小程序描述 <font color="red">*</font></label>
+                    <div class="col-sm-8">
+                        <input type="text" name="data[description]" class="form-control" value="" placeholder="小程序描述，不要超过18个字" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 col-lg-2 control-label">APPID <font color="red">*</font></label>
+                    <div class="col-sm-8">
+                        <input type="text" name="data[appid]" class="form-control" value="" placeholder="小程序APPID" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 col-lg-2 control-label">页面路径 <font color="red"></font></label>
+                    <div class="col-sm-8">
+                        <input type="text" name="data[path]" class="form-control" value="" placeholder="务必正确填写落地页面路径，如：/pages/index/index" />
+                        <span class="help-block" style="font-size: 12px;color:red;font-weight:bold;">
+						备注：↑ 此项选填，未填默认进入首页。
+					</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">小程序头像：<font color="red">*</font></label>
+                    <div class="col-sm-8">
+                        {php echo tpl_form_field_image('data[image]');}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 col-lg-2 control-label">状态 <font color="red">*</font></label>
+                    <div class="col-xs-12 col-sm-8">
+                        <label class="radio radio-inline">
+                            <input type="radio" name="data[status]" value="0"> 禁用
+                        </label>
+                        <label class="radio radio-inline">
+                            <input type="radio" name="data[status]" value="1" checked> 启用
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-12 col-sm-9 col-md-10 col-lg-10 col-sm-offset-3 col-md-offset-2 col-lg-offset-2">
+                        <input name="submit" type="submit" value="提交" class="btn btn-primary" />
+                        <input type="hidden" name="token" value="{$_W['token']}" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    require(['jquery', 'util'], function($, util){
+        $(function(){
+            $('#form').submit(function(){
+                var result = true;
+                if($('input[name="data[name]"]').val() === ''){
+                    result = false;
+                    util.message('请输入推广备注.');
+                } else if($('input[name="data[appid]"]').val() === ''){
+                    result = false;
+                    util.message('请输入被推广小程序APPID.');
+                } else if($('input[name="data[image]"]').val() === ''){
+                    result = false;
+                    util.message('请输入小程序头像.');
+                } else if($('input[name="data[status]"]').val() === ''){
+                    result = false;
+                    util.message('请选择状态.');
+                }
+                return result;
+            });
+        });
+    });
+</script>
+
+{elseif $op == 'adv_edit'}
+<div class="main">
+    <div class="panel panel-default">
+        <div class="panel-heading">编辑推广</div>
+        <div class="panel-body">
+            <form action="" method="post" class="form-horizontal form" id="form-edit">
+                <input type="hidden" name="c" value="{$_GPC['c']}">
+                <input type="hidden" name="a" value="{$_GPC['a']}">
+                <input type="hidden" name="do" value="{$_GPC['do']}">
+                <input type="hidden" name="m" value="{$_GPC['m']}">
+                <input type="hidden" name="op" value="{$op}">
+
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 col-lg-2 control-label">小程序名称 <font color="red">*</font></label>
+                    <div class="col-sm-8">
+                        <input type="text" name="data[name]" class="form-control" value="{$data['name']}" placeholder="小程序名称" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 col-lg-2 control-label">小程序描述 <font color="red">*</font></label>
+                    <div class="col-sm-8">
+                        <input type="text" name="data[description]" class="form-control" value="{$data['description']}" placeholder="小程序描述，不要超过18个字" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 col-lg-2 control-label">APPID <font color="red">*</font></label>
+                    <div class="col-sm-8">
+                        <input type="text" name="data[appid]" class="form-control" value="{$data['appid']}" placeholder="小程序APPID" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 col-lg-2 control-label">页面路径 <font color="red"></font></label>
+                    <div class="col-sm-8">
+                        <input type="text" name="data[path]" class="form-control" value="{$data['path']}" placeholder="务必正确填写落地页面路径" />
+                        <span class="help-block" style="font-size: 12px;color:red;font-weight:bold;">
+						备注：↑ 此项选填，未填默认进入首页。
+					</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">小程序头像：<font color="red">*</font></label>
+                    <div class="col-sm-8">
+                        {php echo tpl_form_field_image('data[image]', $data['image']);}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 col-lg-2 control-label">状态 <font color="red">*</font></label>
+                    <div class="col-xs-12 col-sm-8">
+                        <label class="radio radio-inline">
+                            <input type="radio" name="data[status]" value="0" {if $data['status'] ==='0'}checked{/if}> 禁用
+                        </label>
+                        <label class="radio radio-inline">
+                            <input type="radio" name="data[status]" value="1" {if $data['status'] ==='1'}checked{/if}> 启用
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-12 col-sm-9 col-md-10 col-lg-10 col-sm-offset-3 col-md-offset-2 col-lg-offset-2">
+                        <input type="hidden" name="id" value="{$id}">
+                        <input name="submit" type="submit" value="提交" class="btn btn-primary" />
+                        <input type="hidden" name="token" value="{$_W['token']}" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    require(['jquery', 'util'], function($, util){
+        $(function(){
+            $('#form-edit').submit(function(){
+                var result = true;
+                if($('input[name="data[name]"]').val() === ''){
+                    result = false;
+                    util.message('请输入推广备注.');
+                } else if($('input[name="data[appid]"]').val() === ''){
+                    result = false;
+                    util.message('请输入被推广小程序APPID.');
+                } else if($('input[name="data[image]"]').val() === ''){
+                    result = false;
+                    util.message('请输入小程序头像.');
+                } else if($('input[name="data[status]"]').val() === ''){
+                    result = false;
+                    util.message('请选择状态.');
+                }
+                return result;
+            });
+        });
+    });
+</script>
+{/if}
+{template 'common/footer'}
